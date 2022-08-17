@@ -14,15 +14,7 @@ promiseOfModal.then(function(val) {
     console.log("User has been on the page for 60 seconds");
     val.style.display = "block";
 })
-
-modal.addEventListener("click", (e) => {
-    switch(e.target.className) {
-        case "close":
-        case "modal":
-        modal.style.display = "none"
-        break;
-    }
-}) */
+*/
 
 //close button
 modal.addEventListener("click", e => {
@@ -36,7 +28,7 @@ modal.addEventListener("click", e => {
 
 //using async-await syntax-----------------
 
-/* another way
+/* --solution.1-------
  async function getModalPromise() {
   let promiseOfModal = new Promise(function (resolve) {
     window.setTimeout(function () {
@@ -47,8 +39,9 @@ modal.addEventListener("click", e => {
   let myModal = await promiseOfModal;
   return myModal;
 }
-getModalPromise(); */
+getModalPromise(); 
 
+//--solution.2--------
 function promiseOfModal() {
   return new Promise(function (resolve) {
     setTimeout(function () {
@@ -61,8 +54,26 @@ async function getModalPromise() {
   return myModal;
 }
 
-getModalPromise();
+getModalPromise();*/
 
+//--solution.3-------
+function promiseOfModal() {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      resolve(modal);
+    }, 1000 * 60);
+  });
+}
+async function getModalPromise() {
+  let myModal = await promiseOfModal();
+  return myModal;
+}
+
+getModalPromise().then(function (val) {
+  val.style.display = "block";
+});
+
+////////////////////////////////////////
 //------Animation end-----------
 const continueBtn = document.getElementById("continue");
 continueBtn.addEventListener("mouseleave", function () {
@@ -72,7 +83,7 @@ continueBtn.addEventListener("mouseleave", function () {
     let getMsg = new Promise((resolve, reject) => {
       setTimeout(function () {
         resolve(alert("Continue to subscribe!"));
-      }, 200);
+      }, 100);
     });
     let asyncAlert = await getMsg;
     return asyncAlert;
