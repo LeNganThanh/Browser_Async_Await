@@ -32,12 +32,12 @@ modal.addEventListener("click", e => {
  async function getModalPromise() {
   let promiseOfModal = new Promise(function (resolve) {
     window.setTimeout(function () {
-      resolve((modal.style.display = "block"));
+      resolve(modal);
     }, 1000 * 60);
   });
 
   let myModal = await promiseOfModal;
-  return myModal;
+  return myModal.style.display ="block";
 }
 getModalPromise(); 
 
@@ -45,16 +45,16 @@ getModalPromise();
 function promiseOfModal() {
   return new Promise(function (resolve) {
     setTimeout(function () {
-      resolve((modal.style.display = "block"));
+      resolve(modal);
     }, 1000 * 60);
   });
 }
 async function getModalPromise() {
   let myModal = await promiseOfModal();
-  return myModal;
+  return myModal.style.display ="block";
 }
 
-getModalPromise();*/
+getModalPromise();
 
 //--solution.3-------
 function promiseOfModal() {
@@ -71,37 +71,84 @@ async function getModalPromise() {
 
 getModalPromise().then(function (val) {
   val.style.display = "block";
-});
+});*/
+
+//--solution from Gerhard----------
+function promiseOfModal() {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      resolve(modal);
+    }, 1000 * 60);
+  });
+}
+async function getModal() {
+  let result = await promiseOfModal(); //the way to use async/await -->> await get the value - modal and execute with style in async
+  result.style.display = "block";
+}
+
+getModal();
 
 ////////////////////////////////////////
 //------Animation end-----------
 const continueBtn = document.getElementById("continue");
-continueBtn.addEventListener("mouseleave", function () {
+
+/* 
+  continueBtn.addEventListener("animationend", function () {
   continueBtn.style.backgroundColor = "darkcyan";
   continueBtn.style.color = "white";
   async function alertMsg() {
     let getMsg = new Promise((resolve, reject) => {
       setTimeout(function () {
-        resolve(alert("Continue to subscribe!"));
+        resolve("Continue to subscribe!");
       }, 100);
     });
     let asyncAlert = await getMsg;
-    return asyncAlert;
+    alert(asyncAlert);
   }
   alertMsg();
 });
-
-/* another way----
-  function alertMsg() {
-    return new Promise((resolve, reject) => {
-      setTimeout(function () {
-        resolve(alert("Continue to subscribe!"));
-      }, 200);
-    });
-  }
-  async function getAlert() {
-    let asyncAlert = await alertMsg();
-    return asyncAlert;
-  }
-  getAlert();
 */
+
+/* another solution--------
+function alertMsg() {
+  return new Promise((resolve, reject) => {
+    setTimeout(function () {
+      resolve("Continue to subscribe!");
+    }, 200);
+  });
+}
+async function getAlert() {
+  let asyncAlert = await alertMsg();
+  alert(asyncAlert);
+}
+getAlert();*/
+
+continueBtn.addEventListener("animationend", function () {
+  continueBtn.style.backgroundColor = "darkcyan";
+  continueBtn.style.color = "white";
+  async function alertMsg() {
+    let getMsg = new Promise((resolve, reject) => {
+      resolve("Continue to subscribe!");
+    });
+    let asyncAlert = await getMsg;
+    setTimeout(alert(asyncAlert), 100);
+  }
+  alertMsg();
+});
+//--solution from Gerhard-----------
+/* continueBtn.addEventListener("animationend", () => {
+  onAnimationComplete();
+});
+async function onAnimationComplete() {
+  const buttonAnimationEnd = await onanimationstart(continueBtn);
+  buttonAnimationEnd.classList.add("btn-info");
+  alert("Continue to subscribe!");
+}
+function onanimationstart(el) {
+  return new Promise(resolve => {
+    el.addEventListener("animationend", () => {
+      resolve(el);
+    });
+  });
+}
+ */
